@@ -1,0 +1,11 @@
+{
+  "name": "daylog",
+  "owner": { "name": "Jimmy Chen" },
+  "plugins": [
+    {
+      "name": "daylog",
+      "source": "./",
+      "description": "Deliberate daily plan -> check -> reflect loop. Vault-less, dependency-free."
+    }
+  ]
+}

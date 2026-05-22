@@ -1,0 +1,8 @@
+{
+  "name": "daylog",
+  "description": "A deliberate daily plan -> check -> reflect loop for developers. Vault-less, dependency-free Markdown journaling and planning.",
+  "version": "0.1.0",
+  "author": { "name": "Jimmy Chen" },
+  "homepage": "https://github.com/USERNAME/daylog",
+  "license": "MIT"
+}
