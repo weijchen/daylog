@@ -105,11 +105,11 @@ The template is a user-editable file shipped with the plugin. Customizing struct
 
 ## Config
 
-Written by `/daylog-init`, read by every command. A small, human-readable file (format: a single Markdown or simple key-value file; final format chosen during implementation). Fields:
+Written by `/daylog-init`, read by every command. The config is a **single human-readable Markdown file** (`config.md` in the storage root), with settings expressed as a simple labeled list that Claude parses from the prompt. Fields:
 
 - `storage_root` — directory for day files. Default: `~/daylog/`.
 - `language` — output language for generated text. Default: `en`.
-- `repos` — list of repository paths to scan for git context. Default: the current directory's repo, or a discovery rule (e.g., scan `~/Dev` one level deep). Configurable.
+- `repos` — repository paths to scan for git context. **Default: scan `~/Dev` one level deep** (i.e., each immediate subdirectory of `~/Dev` that is a git repo). User can override with an explicit list at init.
 - `hooks` (optional) — a list of named shell commands whose stdout is fed into planning/summary as additional context (e.g., a Linear or GitHub CLI). Dependency-free core; entirely opt-in.
 
 ## Context Gathering
@@ -140,7 +140,5 @@ Written by `/daylog-init`, read by every command. A small, human-readable file (
 
 ## Open Questions
 
-- **Config file format** — Markdown vs. simple YAML/key-value. Decide in implementation; favor whatever Claude parses most reliably from a prompt with least ceremony.
-- **Default repo-discovery rule** — current-repo-only vs. scan a configured root one level deep. Lean toward explicit `repos` list set at init, with current dir as fallback.
 - **Marketplace distribution** — publish in the author's own marketplace repo, or submit to a community marketplace. Decide before launch, not before build.
 - **Does the author dogfood `daylog` for their own dev journal**, replacing the `~/Dev/journal/` portion of LifeOS? Out of scope for v1 build, but informs whether the existing journal format should be matched.
