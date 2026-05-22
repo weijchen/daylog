@@ -105,7 +105,7 @@ The template is a user-editable file shipped with the plugin. Customizing struct
 
 ## Config
 
-Written by `/daylog-init`, read by every command. The config is a **single human-readable Markdown file** (`config.md` in the storage root), with settings expressed as a simple labeled list that Claude parses from the prompt. Fields:
+Written by `/daylog-init`, read by every command. The config is a **single human-readable Markdown file at a fixed path** — `~/.config/daylog/config.md` — with settings expressed as a simple labeled list that Claude parses from the prompt. (Fixed path rather than inside the storage root, since commands must locate the config *before* they know `storage_root`.) Fields:
 
 - `storage_root` — directory for day files. Default: `~/daylog/`.
 - `language` — output language for generated text. Default: `en`.
