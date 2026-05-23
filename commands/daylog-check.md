@@ -13,7 +13,7 @@ allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion]
 ## Process
 
 ### 1. Read config and today's file
-Read `~/.config/daylog/config.md` for `storage_root`, `language`, and `repos`.
+Read `~/.config/daylog/config.md` for `storage_root`, `language`, `repos`, and `exclude`.
 Read `{storage_root}/{today}.md`. This is the deliberate "load my context for this session" moment — summarize the day's `Focus`, `Carryover`, and any existing `Progress` back to the user so the session has context.
 If today's file does not exist, tell the user to run `/daylog-start` first and stop.
 

@@ -110,6 +110,7 @@ Written by `/daylog-init`, read by every command. The config is a **single human
 - `storage_root` — directory for day files. Default: `~/daylog/`.
 - `language` — output language for generated text. Default: `en`.
 - `repos` — repository paths to scan for git context. **Default: `scan ~/Dev`**, which auto-discovers git repos under `~/Dev` up to ~3 levels deep (`find ~/Dev -maxdepth 3 -type d -name .git -prune`), catching nested layouts like `~/Dev/Projects/<repo>`. Only repos with same-day activity are surfaced. User can override with an explicit list at init.
+- `exclude` (optional) — a list of directories to skip during `scan` discovery (e.g., `~/Dev/Archive` of retired repos that have perpetual stale uncommitted changes). Discovered repos under any excluded path are dropped.
 - `hooks` (optional) — a list of named shell commands whose stdout is fed into planning/summary as additional context (e.g., a Linear or GitHub CLI). Dependency-free core; entirely opt-in.
 
 ## Context Gathering

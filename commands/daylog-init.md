@@ -33,6 +33,8 @@ Create `~/.config/daylog/config.md` (run `mkdir -p ~/.config/daylog` first):
 - storage_root: {storage_root}
 - language: {language}
 - repos: {repos}
+- exclude:
+  # optional — directories to skip during scan (e.g. retired repos): add `  - <path>` lines
 - hooks:
   # optional — each hook is a named shell command whose stdout is added as context:
   # - linear: linear issue list --assignee me --state backlog
