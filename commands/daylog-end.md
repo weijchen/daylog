@@ -21,12 +21,12 @@ If today's file does not exist, warn the user and offer to create a minimal one 
 ### 2. Summarize step (auto-draft)
 Synthesize the morning `Focus`, the `Progress` checkpoints, and today's git commits into a draft 2–4 sentence `## Summary` of the day. Present this draft to the user.
 
-### 3. Confirm and reflect (AskUserQuestion)
+### 3. Confirm and reflect (AskUserQuestion, one at a time)
 1. "Here's the draft summary — adjust anything?" — user edits/approves the summary.
 2. "What did you learn today? (optional)" — learnings.
 
 ### 4. Write the record
-Fill the day file's previously-empty sections (do not touch `Focus`/`Carryover`/`Context`/`Progress`):
+Fill the day file's previously-empty sections (do not touch `Focus`/`Carryover`/`Context`/`Progress`). If `## Summary` already has content (e.g. `/daylog-end` was run earlier today), show it and ask whether to replace or keep it before writing:
 - `## Summary` → the confirmed summary. (This is what tomorrow's `/daylog-start` reads as "yesterday".)
 - `## Done / Carryover` → completed items (cross-referenced with the morning Focus) and what rolls to tomorrow.
 - `## Learnings` → the user's learnings, if any.

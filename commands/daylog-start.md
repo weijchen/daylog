@@ -16,7 +16,7 @@ allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion]
 Read `~/.config/daylog/config.md`. Extract `storage_root`, `language`, `repos`. If the config is missing, tell the user to run `/daylog-init` first and stop.
 
 ### 2. Gather context (in parallel)
-- **Yesterday's summary**: list `{storage_root}/*.md`, pick the most recent file whose date is before today, and read its `## Summary` section. (There may be gaps — use the latest prior file, not strictly yesterday.)
+- **Yesterday's summary**: list `{storage_root}/*.md`, pick the most recent file whose date is before today, and read both its `## Summary` and `## Done / Carryover` sections (the latter holds the explicit carryover items). (There may be gaps — use the latest prior file, not strictly yesterday.)
 - **Git state**: resolve `repos`:
   - If `repos` is `scan {DIR} one level deep`: run `for d in {DIR}/*/; do [ -d "$d.git" ] && echo "$d"; done`.
   - Otherwise treat `repos` as explicit paths.
@@ -31,10 +31,10 @@ Show: carryover from the latest prior summary, current git state, and any hook o
 2. "Anything to defer or drop?" — free text (optional)
 
 ### 5. Create today's day file
-Copy the plugin's `templates/day.md` and fill tokens:
+Read the plugin's `templates/day.md` (use Read to load the actual file — do not reconstruct it from memory) and fill tokens:
 - `{{DATE}}` → today
 - `{{FOCUS}}` → the user's focus
-- `{{CARRYOVER}}` → unfinished items from the latest prior summary + the user's defer/drop notes
+- `{{CARRYOVER}}` → unfinished items from the latest prior file's `## Summary` and `## Done / Carryover` + the user's defer/drop notes
 - `{{CONTEXT}}` → the git state and hook output gathered in step 2
 
 Write to `{storage_root}/{today}.md`. If the file already exists, ask whether to overwrite or open the existing one.
@@ -42,4 +42,4 @@ Write to `{storage_root}/{today}.md`. If the file already exists, ask whether to
 Generate all text in the configured `language`.
 
 ### 6. Validate & show
-Read the file back, confirm the frontmatter `date` matches today and the three plan sections are populated. Display for approval; edit on request.
+Read the file back, confirm the frontmatter `date` matches today and that Focus, Carryover, and Context are non-empty (Progress, Summary, Done / Carryover, and Learnings should remain empty — they are filled later by `/daylog-check` and `/daylog-end`). Display for approval; edit on request.

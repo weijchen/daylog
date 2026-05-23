@@ -33,6 +33,8 @@ Create `~/.config/daylog/config.md` (run `mkdir -p ~/.config/daylog` first):
 - language: {language}
 - repos: {repos}
 - hooks:
+  # optional — each hook is a named shell command whose stdout is added as context:
+  # - linear: linear issue list --assignee me --state backlog
 ```
 
 Then create the storage directory: `mkdir -p {storage_root}`.
