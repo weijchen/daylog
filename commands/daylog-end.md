@@ -15,7 +15,7 @@ allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion]
 ### 1. Read config, today's file, and the day's signals
 Read `~/.config/daylog/config.md` for `storage_root`, `language`, `repos`.
 Read `{storage_root}/{today}.md` for the morning `Focus` and the `Progress` checkpoints.
-Gather **today's git commits** across the resolved `repos` (`git -C {repo} log --oneline --since="$(date +%F)T00:00:00"`).
+Gather **today's git commits** across the resolved `repos` — resolve `repos` exactly as `/daylog-start` step 2 (a `scan {DIR}` directive → `find {DIR} -maxdepth 3 -type d -name .git -prune 2>/dev/null | sed 's|/.git$||'`; otherwise an explicit list), then for each repo `git -C {repo} log --oneline --since="$(date +%F)T00:00:00"`. Only include repos with commits today.
 If today's file does not exist, warn the user and offer to create a minimal one or stop.
 
 ### 2. Summarize step (auto-draft)

@@ -2,6 +2,6 @@
 
 - storage_root: ~/daylog
 - language: en
-- repos: scan ~/Dev one level deep
+- repos: scan ~/Dev
 - hooks:
   - linear: linear issue list --assignee me --state backlog

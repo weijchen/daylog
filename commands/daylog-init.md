@@ -21,7 +21,7 @@ Run: `cat ~/.config/daylog/config.md 2>/dev/null`
 ### 2. Ask setup questions (AskUserQuestion, one at a time)
 1. "Where should day files be stored?" — default `~/daylog`
 2. "Output language for generated entries?" — default `en`
-3. "Which repos should daylog scan for git context?" — default: `scan ~/Dev one level deep`; or the user provides explicit paths.
+3. "Which repos should daylog scan for git context?" — default: `scan ~/Dev` (auto-discovers git repos under it, including nested ones like `~/Dev/Projects/<repo>`); or the user provides explicit paths.
 4. "Add any context hooks now? (optional — a hook is a named shell command whose output is added as context, e.g. `linear: linear issue list --assignee me --state backlog`. Press skip to add later.)" — collect zero or more `name: command` pairs.
 
 ### 3. Write the config

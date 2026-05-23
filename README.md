@@ -29,7 +29,7 @@ Your live config is at `~/.config/daylog/config.md` (written by `/daylog-init`; 
 
 - `storage_root` — where day files live (default `~/daylog`)
 - `language` — output language (default `en`)
-- `repos` — `scan ~/Dev one level deep`, or explicit paths
+- `repos` — `scan ~/Dev` (auto-discovers git repos under it, including nested ones like `~/Dev/Projects/<repo>`), or explicit paths
 - `hooks` — optional shell commands whose output is added as context (e.g. a Linear/GitHub CLI)
 
 ## Context sources

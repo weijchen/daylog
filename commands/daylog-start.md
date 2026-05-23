@@ -18,9 +18,9 @@ Read `~/.config/daylog/config.md`. Extract `storage_root`, `language`, `repos`. 
 ### 2. Gather context (in parallel)
 - **Yesterday's summary**: list `{storage_root}/*.md`, pick the most recent file whose date is before today, and read both its `## Summary` and `## Done / Carryover` sections (the latter holds the explicit carryover items). (There may be gaps — use the latest prior file, not strictly yesterday.)
 - **Git state**: resolve `repos`:
-  - If `repos` is `scan {DIR} one level deep`: run `for d in {DIR}/*/; do [ -d "$d.git" ] && echo "$d"; done`.
-  - Otherwise treat `repos` as explicit paths.
-  For each repo, collect current branch (`git -C {repo} rev-parse --abbrev-ref HEAD`), today's commits (`git -C {repo} log --oneline --since="$(date +%F)T00:00:00"`), and uncommitted changes (`git -C {repo} status -s`).
+  - If `repos` is a `scan {DIR}` directive: discover git repos under `{DIR}` with `find {DIR} -maxdepth 3 -type d -name .git -prune 2>/dev/null | sed 's|/.git$||'` (this finds repos nested a couple levels down, e.g. `{DIR}/Projects/<repo>`).
+  - Otherwise treat `repos` as an explicit list of repo paths (comma/space/newline-separated).
+  For each repo, collect current branch (`git -C {repo} rev-parse --abbrev-ref HEAD`), today's commits (`git -C {repo} log --oneline --since="$(date +%F)T00:00:00"`), and uncommitted changes (`git -C {repo} status -s`). **Only surface repos that have today's commits or uncommitted changes — skip dormant ones** so the context stays relevant.
 - **Hooks**: for each hook in config, run its command and capture stdout.
 
 ### 3. Present a concise context summary
