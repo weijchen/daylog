@@ -60,7 +60,7 @@ Morning planning. Steps:
 1. Read config.
 2. Gather context: read **yesterday's day file** (specifically its `Summary` section) for carryover; collect **git state** (current branch, any uncommitted/recent work) across configured repos; run any configured hooks.
 3. Present a concise context summary.
-4. Ask the user their **focus for today** (and what to defer/drop).
+4. Ask the user their **focus for today** (and what to defer/drop). The focus question is always **multi-select**, offering candidate priorities derived from the gathered context (carryover, active repos, today's commits) plus a free-form option.
 5. Create today's day file from the template, populating the plan sections.
 6. Show the file for approval; edit on request.
 

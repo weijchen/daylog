@@ -28,7 +28,7 @@ Read `~/.config/daylog/config.md`. Extract `storage_root`, `language`, `repos`, 
 Show: carryover from the latest prior summary, current git state, and any hook output. Keep it brief.
 
 ### 4. Ask the user (AskUserQuestion)
-1. "What's your focus today?" — free text (the day's priorities)
+1. "What's your focus today?" — **always a multi-select question** (`multiSelect: true`). Derive 3–4 candidate focus items from the gathered context (carryover items, active repos / WIP, today's commits) as the options so the user can pick several at once; they can always add their own via "Other". The day's priorities are the selected items.
 2. "Anything to defer or drop?" — free text (optional)
 
 ### 5. Create today's day file
