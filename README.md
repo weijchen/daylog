@@ -2,6 +2,8 @@
 
 A deliberate daily **plan → check → reflect** loop for developers — as a Claude Code plugin. Vault-less, dependency-free, plain Markdown.
 
+> **Status: prototype / reference implementation.** daylog runs end-to-end, but it's a minimal, portable take on a daily-workflow pattern — not a battle-tested daily driver. The author personally uses a richer, vault-integrated workflow; daylog distills the *loop* into something anyone can adopt. Treat it as a starting point to fork and shape. Issues and PRs welcome.
+
 `daylog` is a *human-facing* journal and planner. It is **not** an automatic agent-memory tool: nothing is captured in the background and nothing is injected into your sessions unless you ask. You decide, in your own words, what each day means and what carries forward. (If you want automatic session memory, see the official Remember plugin instead — daylog is the deliberate, human-authored counterpart.)
 
 ## The daily loop
@@ -18,8 +20,8 @@ Each day is one file: `YYYY-MM-DD.md`. The evening summary is what next morning 
 ## Install
 
 ```
-/plugin marketplace add USERNAME/daylog
-/plugin install daylog
+/plugin marketplace add weijchen/daylog
+/plugin install daylog@daylog
 ```
 Then run `/daylog-init`.
 
