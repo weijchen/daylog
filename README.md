@@ -25,6 +25,13 @@ Each day is one file: `YYYY-MM-DD.md`. The evening summary is what next morning 
 ```
 Then run `/daylog-init`.
 
+## Requirements
+
+- **Claude Code** with plugin support — daylog is built and tested against Claude Code **2.1.x** (developed on 2.1.177).
+- No other dependencies: the core is plain Markdown commands plus `git`. Optional [hooks](#context-sources) use whatever CLIs you point them at.
+
+daylog relies on Claude Code's evolving plugin/skill API (slash commands, `templates/day.md` substitution tokens, config hooks). On much older Claude Code versions these may not resolve and entries can come out incomplete — keep Claude Code current. The manifest can't yet enforce a minimum version; a hard pin will follow once the plugin API stabilises.
+
 ## Configuration
 
 Your live config is at `~/.config/daylog/config.md` (written by `/daylog-init`; `templates/config.md` in this repo shows the format). Fields:
