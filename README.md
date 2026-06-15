@@ -33,12 +33,12 @@ Your live config is at `~/.config/daylog/config.md` (written by `/daylog-init`; 
 - `language` — output language (default `en`)
 - `repos` — `scan ~/Dev` (auto-discovers git repos under it, including nested ones like `~/Dev/Projects/<repo>`), or explicit paths
 - `exclude` — optional list of directories to skip during scan (e.g. `~/Dev/Archive` of retired repos)
-- `hooks` — optional shell commands whose output is added as context (e.g. a Linear/GitHub CLI)
+- `hooks` — optional shell commands whose output is added as context (e.g. a Linear/GitHub CLI). They run with your full shell privileges on every `/daylog-start`, so only add commands you trust.
 
 ## Context sources
 
 - **Git (built-in):** today's commits, current branch, uncommitted changes across your configured repos.
-- **Hooks (optional, opt-in):** any shell command — that's how external services plug in without daylog depending on them.
+- **Hooks (optional, opt-in):** any shell command — that's how external services plug in without daylog depending on them. `/daylog-init` shows the hook list and asks you to confirm before storing it, and `/daylog-start` displays each command before running it — so a hook from a synced/shared config can't run unseen.
 
 ## Customizing & localizing
 

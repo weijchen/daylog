@@ -25,7 +25,7 @@ Read `~/.config/daylog/config.md`. Extract `storage_root`, `language`, `repos`, 
   - Otherwise treat `repos` as an explicit list of repo paths (comma/space/newline-separated).
   - Then drop any discovered repo whose path is under a directory listed in the config's `exclude` field (e.g. an `~/Dev/Archive` of retired repos).
   For each repo, collect current branch (`git -C {repo} rev-parse --abbrev-ref HEAD`), today's commits (`git -C {repo} log --oneline --since="$(date +%F)T00:00:00"`), and uncommitted changes (`git -C {repo} status -s`). **Only surface repos that have today's commits or uncommitted changes — skip dormant ones** so the context stays relevant.
-- **Hooks**: for each hook in config, run its command and capture stdout.
+- **Hooks**: if the config defines hooks, **first display the full list of `name: command` entries and note they come from `~/.config/daylog/config.md` and run as shell commands with your privileges** — so a hook arriving via a synced/shared config can't run unseen. Then run each and capture stdout. **If any command looks destructive or unexpected (e.g. `rm`, `curl … | sh`, credential paths), ask the user to confirm before running that one.** Skip a failing hook gracefully — don't abort planning.
 
 ### 3. Present a concise context summary
 Show: carryover from the latest prior summary, current git state, and any hook output. Keep it brief.

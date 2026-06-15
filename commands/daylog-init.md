@@ -36,11 +36,13 @@ Create `~/.config/daylog/config.md` (run `mkdir -p ~/.config/daylog` first):
 - exclude:
   # optional — directories to skip during scan (e.g. retired repos): add `  - <path>` lines
 - hooks:
-  # optional — each hook is a named shell command whose stdout is added as context:
+  # optional — each hook is a named shell command whose stdout is added as context.
+  # ⚠️ hooks run as shell commands with your full privileges on every /daylog-start —
+  # only add commands you trust; review any that arrive via a synced/shared config.
   # - linear: linear issue list --assignee me --state backlog
 ```
 
-If the user supplied hooks in step 2.4, write them as `  - {name}: {command}` lines under `hooks:` (replacing the comment examples). If they skipped, leave the commented examples as-is.
+If the user supplied hooks in step 2.4, **first display the full resolved list of `name: command` pairs and warn that each runs as a shell command with full user privileges on every `/daylog-start`; ask for explicit confirmation (AskUserQuestion) before storing them.** Only on confirmation, write them as `  - {name}: {command}` lines under `hooks:` (replacing the comment examples). If the user declines, write no hooks and tell them they can add hooks later by editing the config. If they skipped in 2.4, leave the commented examples as-is.
 
 Then create the storage directory: `mkdir -p {storage_root}`.
 
