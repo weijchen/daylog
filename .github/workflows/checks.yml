@@ -1,0 +1,23 @@
+name: checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run test suite
+        run: sh tests/run.sh
+
+  # Kept as its own step so a manifest divergence names itself in the job list
+  # rather than hiding inside a generic test failure.
+  plugin-metadata:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: plugin.json / marketplace.json agree
+        run: sh scripts/check-plugin-metadata.sh

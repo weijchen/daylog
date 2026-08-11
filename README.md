@@ -36,16 +36,36 @@ daylog relies on Claude Code's evolving plugin/skill API (slash commands, `templ
 
 Your live config is at `~/.config/daylog/config.md` (written by `/daylog-init`; `templates/config.md` in this repo shows the format). Fields:
 
-- `storage_root` — where day files live (default `~/daylog`)
+- `storage_root` — where day files live (default `~/daylog`; see [Storage & backup](#storage--backup))
 - `language` — output language (default `en`)
 - `repos` — `scan ~/Dev` (auto-discovers git repos under it, including nested ones like `~/Dev/Projects/<repo>`), or explicit paths
 - `exclude` — optional list of directories to skip during scan (e.g. `~/Dev/Archive` of retired repos)
+- `hook_timeout` — seconds any single hook may run before `/daylog-start` gives up on it (default `10`)
 - `hooks` — optional shell commands whose output is added as context (e.g. a Linear/GitHub CLI). They run with your full shell privileges on every `/daylog-start`, so only add commands you trust.
+
+## Storage & backup
+
+`storage_root` defaults to `~/daylog` — a plain local directory. daylog is vault-less by design, but **vault-less does not have to mean backup-less**: nothing syncs, versions, or backs that directory up, so a disk failure or a stray `rm -rf` takes every entry with it. Months of daily history is exactly the kind of thing you only discover is gone once it matters.
+
+Point `storage_root` at somewhere already protected:
+
+- **iCloud Drive** — `~/Library/Mobile Documents/com~apple~CloudDocs/daylog`
+- **Dropbox / Drive / OneDrive** — any synced folder
+- **A git repo** — e.g. inside your dotfiles, giving you version history as well as a copy
+
+Day files are plain Markdown with no index or database, so moving `storage_root` is just moving the directory and updating the config. `/daylog-init` suggests this when it asks where to store day files.
 
 ## Context sources
 
 - **Git (built-in):** today's commits, current branch, uncommitted changes across your configured repos.
-- **Hooks (optional, opt-in):** any shell command — that's how external services plug in without daylog depending on them. `/daylog-init` shows the hook list and asks you to confirm before storing it, and `/daylog-start` displays each command before running it — so a hook from a synced/shared config can't run unseen.
+- **Hooks (optional, opt-in):** any shell command — that's how external services plug in without daylog depending on them. `/daylog-init` shows the hook list and asks you to confirm before storing it.
+
+### How hooks are guarded
+
+Hooks run with your full shell privileges every morning, so two things guard them:
+
+- **Approval survives a re-sync.** When you approve a hook list, daylog records a hash of it in machine-local state (`${XDG_STATE_HOME:-~/.local/state}/daylog/hooks.sha256`). `/daylog-start` re-checks that hash every run and **asks again whenever the list has changed** — so a hook that arrives later, via dotfiles or an iCloud-synced `config.md`, cannot run just because it was already on disk. The hash lives outside `config.md` on purpose: stored inside, it would sync along with the file it is meant to guard. A list that has never been approved on this machine is treated the same as a changed one, and a check that fails to run is reported as unverified rather than clean.
+- **A hook cannot hang your morning.** Each one runs under `hook_timeout` (default 10s). A hook that blocks on a network call or an auth prompt is abandoned and reported as timed out — distinctly from one that failed and one that simply returned nothing — and planning continues without it.
 
 ## Customizing & localizing
 
