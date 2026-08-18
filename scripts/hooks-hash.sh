@@ -59,9 +59,36 @@ extract_hooks() {
   ' "$1"
 }
 
+# SP-801: hashing must fail CLOSED. POSIX sh has no pipefail, so a missing or
+# failing shasum used to make `shasum | cut` print an empty string with exit 0
+# — store recorded an empty hash, verify compared empty==empty, and this
+# review gate passed forever without ever hashing anything.
+sha256_tool() {
+  if command -v shasum >/dev/null 2>&1; then
+    printf 'shasum'
+  elif command -v sha256sum >/dev/null 2>&1; then
+    printf 'sha256sum'
+  else
+    return 1
+  fi
+}
+
+run_sha256() {
+  if [ "$1" = shasum ]; then shasum -a 256; else sha256sum; fi
+}
+
 compute() {
   [ -f "$1" ] || { printf 'daylog: config not found: %s\n' "$1" >&2; exit 2; }
-  extract_hooks "$1" | shasum -a 256 | cut -d' ' -f1
+  if ! tool=$(sha256_tool); then
+    printf 'daylog: neither shasum nor sha256sum found; refusing to skip hook review\n' >&2
+    exit 2
+  fi
+  hash=$(extract_hooks "$1" | run_sha256 "$tool" | cut -d' ' -f1)
+  if [ -z "$hash" ]; then
+    printf 'daylog: hash computation produced no output; refusing to skip hook review\n' >&2
+    exit 2
+  fi
+  printf '%s\n' "$hash"
 }
 
 has_hooks() {
@@ -91,7 +118,10 @@ case "$cmd" in
     [ $# -ge 2 ] || usage
     dir=$(state_dir)
     mkdir -p "$dir" || exit 2
-    compute "$2" > "$dir/hooks.sha256" || exit 2
+    # Compute before touching the file: `compute > file` truncates first, so a
+    # failed compute would leave an empty approved-hash poisoning every verify.
+    approved=$(compute "$2") || exit 2
+    printf '%s\n' "$approved" > "$dir/hooks.sha256" || exit 2
     printf 'daylog: hook list approved (%s)\n' "$dir/hooks.sha256"
     ;;
 
