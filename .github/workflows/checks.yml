@@ -19,5 +19,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # jq ships with the ubuntu-latest image today, so this is a no-op on the
+      # normal path — it exists so the check keeps working if that ever stops
+      # being true, without paying an apt round-trip on every run (SP-854).
+      - name: Ensure jq is available
+        run: command -v jq >/dev/null || { sudo apt-get update && sudo apt-get install -y jq; }
+
       - name: plugin.json / marketplace.json agree
         run: sh scripts/check-plugin-metadata.sh
