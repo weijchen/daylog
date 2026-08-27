@@ -121,7 +121,14 @@ case "$cmd" in
     # Compute before touching the file: `compute > file` truncates first, so a
     # failed compute would leave an empty approved-hash poisoning every verify.
     approved=$(compute "$2") || exit 2
-    printf '%s\n' "$approved" > "$dir/hooks.sha256" || exit 2
+    # ...and stage before replacing, for the same reason one step later: a plain
+    # redirect truncates the canonical file, so a kill between the truncate and
+    # the write leaves an empty record. verify then called that drift (SP-852).
+    tmp=$(mktemp "$dir/hooks.sha256.XXXXXX") || exit 2
+    if ! printf '%s\n' "$approved" > "$tmp" || ! mv "$tmp" "$dir/hooks.sha256"; then
+      rm -f "$tmp"
+      exit 2
+    fi
     printf 'daylog: hook list approved (%s)\n' "$dir/hooks.sha256"
     ;;
 
@@ -138,13 +145,27 @@ case "$cmd" in
     stored_file="$(state_dir)/hooks.sha256"
     current=$(compute "$config") || exit 2
 
-    if [ ! -f "$stored_file" ]; then
-      printf 'daylog: this config defines hooks that have never been reviewed on this machine.\n' >&2
-      printf 'Review them, then approve with: %s store %s\n' "$0" "$config" >&2
+    stored=""
+    [ -f "$stored_file" ] && stored=$(cat "$stored_file")
+    # A blank record is the absence of an approval, not a different one. Reporting
+    # it as drift said "the hook list has CHANGED" when nothing had changed, which
+    # is false and trains reflexive re-approval of a security gate (SP-852). A
+    # *truncated* hash is indistinguishable from a different one, which is why the
+    # atomic write above matters as well as this guard.
+    if [ -z "$(printf '%s' "$stored" | tr -d '[:space:]')" ]; then
+      if [ -f "$stored_file" ]; then
+        printf 'daylog: the stored approval record is empty or unreadable; treating these hooks as unreviewed.\n' >&2
+      else
+        printf 'daylog: this config defines hooks that have never been reviewed on this machine.\n' >&2
+      fi
+      # Show what is being approved. Asking someone to approve a list they cannot
+      # see is not a review (SP-853) — the drift branch below already did this.
+      printf 'Current hooks:\n' >&2
+      extract_hooks "$config" | sed 's/^/  - /' >&2
+      printf 'Review the list above, then approve with: %s store %s\n' "$0" "$config" >&2
       exit 3
     fi
 
-    stored=$(cat "$stored_file")
     if [ "$current" = "$stored" ]; then
       exit 0
     fi
