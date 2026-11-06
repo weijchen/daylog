@@ -6,6 +6,18 @@ A deliberate daily **plan → check → reflect** loop for developers — as a C
 
 `daylog` is a *human-facing* journal and planner. It is **not** an automatic agent-memory tool: nothing is captured in the background and nothing is injected into your sessions unless you ask. You decide, in your own words, what each day means and what carries forward. (If you want automatic session memory, see the official Remember plugin instead — daylog is the deliberate, human-authored counterpart.)
 
+## What it does
+
+Four slash commands keep one Markdown file per day: the morning command writes a plan from yesterday's summary and today's git state, the midday command logs a timestamped checkpoint, the evening command drafts the summary from git and the checkpoints, and the first-run command creates the config. Optional hooks pull extra context from CLIs you name.
+
+## Why it exists
+
+The author's own daily loop lives in a vault-integrated, personal workflow; daylog distils just the loop into a portable plugin anyone can install and fork, with nothing captured in the background.
+
+## Where it runs
+
+Inside Claude Code on your own machine, as an installed plugin; storage is a directory of Markdown files you choose. Development is parked since 2026-08-30: the plugin works as published, and issues and PRs are still read.
+
 ## The daily loop
 
 | Command | When | What it does |
