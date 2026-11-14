@@ -20,6 +20,8 @@ Dependency-free POSIX sh (`jq` for the manifest check). To try a command change,
 
 ## Deploy
 
+Ships by: push
+
 Public repo and marketplace (`/plugin marketplace add weijchen/daylog`): a push to `main` is the release, so the manifest version moves with user-visible changes. Mac-only in Jimmy's terms (a push closes the ticket). Parked since 2026-08-30 (scanner-excluded at Jimmy's request); reviving it is removing that exclusion in cron-automation's `config/scanner_config.yaml`.
 
 ## Traps
