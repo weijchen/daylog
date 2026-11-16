@@ -91,8 +91,10 @@ assert_ok "a config with no hooks verifies clean without a stored hash" \
 rm -rf "$hh_tmp/state"
 "$HH" store "$hh_tmp/a.md" >/dev/null 2>&1
 assert_ok "store writes under DAYLOG_STATE_DIR" test -f "$hh_tmp/state/hooks.sha256"
-assert_exit 1 "store writes nothing next to the config file" \
-  sh -c 'ls "$1"/*.sha256 >/dev/null 2>&1' _ "$hh_tmp"
+# Count the matches instead of reading `ls`'s exit code: with no match BSD ls
+# exits 1 and GNU ls exits 2, so an exit-code check is red on Linux (SP-1505).
+assert_eq "" "$(find "$hh_tmp" -maxdepth 1 -name '*.sha256')" \
+  "store writes nothing next to the config file"
 
 assert_eq "\${XDG_STATE_HOME:-\$HOME/.local/state}/daylog" \
   "$(DAYLOG_STATE_DIR= "$HH" state-dir --literal)" \
